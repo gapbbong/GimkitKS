@@ -155,7 +155,9 @@
     const stage = $('#g-stage');
     if (stageGame !== s.game) { stageGame = s.game; st.build(stage); }
     st.update(stage, s);
-    sync($('#g-lb'), s.players.slice(0, 10), (p) => p.id,
+    $('#g-lb').classList.toggle('compact', s.players.length > 14);
+    $('#g-lbtitle').textContent = `🏆 실시간 순위 (${s.players.length}명)`;
+    sync($('#g-lb'), s.players, (p) => p.id,
       () => { const d = document.createElement('div'); d.className = 'it'; d.innerHTML = '<span class="no"></span><span class="nm"></span><span class="sc"></span>'; return d; },
       (d, p, i) => { d.querySelector('.no').textContent = i + 1; d.querySelector('.nm').textContent = `${p.emoji} ${p.name}`; d.querySelector('.sc').textContent = fmt(p.score); d.style.order = i; d.style.opacity = p.on ? 1 : 0.5; });
     $('#g-feed').innerHTML = s.feed.slice().reverse().map((f) => `<div>${esc(f.text)}</div>`).join('');
@@ -234,13 +236,32 @@
   $('#h-qsave').onclick = () => send({ t: 'setQuestions', text: $('#h-qtext').value });
   $('#h-qreset').onclick = () => send({ t: 'resetQuestions' });
   $('#h-qload').onclick = () => $('#h-qfile').click();
+  $('#h-qsample').onclick = () => {
+    const sample = [
+      '# 퀴즈 아레나 문제 파일 샘플',
+      '# 한 줄에 한 문제를 쓰고 세로선 기호로 칸을 나눕니다: 질문, 정답, 오답1, 오답2, 오답3 순서',
+      '# 오답은 1~3개까지 쓸 수 있고 샵 기호로 시작하는 줄은 무시됩니다',
+      '# 아래 예시를 지우고 내 문제를 쓴 뒤 로비의 파일 불러오기로 올리세요',
+      '대한민국의 수도는? | 서울 | 부산 | 대전 | 인천',
+      '물의 화학식은? | H2O | CO2 | O2 | NaCl',
+      '12 x 12 = ? | 144 | 122 | 124 | 154',
+      "'Apple'의 뜻은? | 사과 | 배 | 포도",
+      '훈민정음을 창제한 왕은? | 세종대왕 | 태조 | 정조 | 영조',
+    ].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + sample], { type: 'text/plain;charset=utf-8' }));
+    a.download = '퀴즈아레나_샘플문제.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
   $('#h-qfile').onchange = (e) => {
     const f = e.target.files[0];
     if (!f) return;
     const r = new FileReader();
     r.onload = () => {
       // CSV(쉼표)로 저장된 파일도 허용: | 나 탭이 없는 줄은 쉼표를 구분자로 본다
-      const text = String(r.result).split(/\r?\n/).map((l) => (/[|\t]/.test(l) ? l : l.split(',').join(' | '))).join('\n');
+      const text = String(r.result).replace(/^﻿/, '').split(/\r?\n/).filter((l) => !l.trim().startsWith('#'))
+        .map((l) => (/[|\t]/.test(l) ? l : l.split(',').join(' | '))).join('\n');
       $('#h-qtext').value = text;
       send({ t: 'setQuestions', text });
     };
