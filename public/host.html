@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>퀴즈 아레나 - 교사 화면</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="host">
+<div class="hwrap">
+
+  <!-- 로비 -->
+  <div id="h-lobby" hidden>
+    <div class="hlobby">
+      <div class="card code-box">
+        <div class="lbl">학생 접속 주소</div>
+        <div class="url" id="h-url"></div>
+        <select id="h-ips"></select>
+        <div class="lbl" style="margin-top:14px">방 코드</div>
+        <div class="code" id="h-code">----</div>
+        <img id="h-qr" alt="QR">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <h2>👥 참가자 <span id="h-count">0</span> / <span id="h-max">40</span></h2>
+          <div class="plist" id="h-players" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h2>🎮 게임 선택</h2>
+          <div class="gpick" id="h-games"></div>
+          <div class="how" id="h-how"></div>
+          <div class="startbar">
+            <label>⏱ 시간
+              <select id="h-min"><option>3</option><option selected>5</option><option>8</option><option>10</option><option>15</option></select> 분
+            </label>
+            <button id="h-start" disabled>▶ 게임 시작!</button>
+          </div>
+        </div>
+        <div class="card">
+          <details class="qed">
+            <summary>📝 문제 편집 (현재 <span id="h-qcount">0</span>문제)</summary>
+            <p style="color:var(--mut);margin:8px 0 0">한 줄에 한 문제: <b>질문 | 정답 | 오답1 | 오답2 | 오답3</b> (오답은 1~3개). 엑셀에서 복사해 붙여넣어도 돼요.</p>
+            <textarea id="h-qtext" spellcheck="false"></textarea>
+            <div class="btnrow" style="margin-top:10px">
+              <button id="h-qsave">저장</button>
+              <button id="h-qreset" class="btn2">기본 문제로 되돌리기</button>
+              <input type="file" id="h-qfile" accept=".txt,.csv,.tsv" style="display:none">
+              <button id="h-qload" class="btn2">파일 불러오기</button>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 게임 중 -->
+  <div id="h-game" hidden style="flex-direction:column;gap:14px;flex:1">
+    <div class="htop">
+      <h2 id="g-title"></h2>
+      <div class="timer" id="g-timer">0:00</div>
+      <div class="btnrow"><button id="g-end" class="btnbad">⏹ 게임 종료</button></div>
+    </div>
+    <div class="hgame">
+      <div class="hstage" id="g-stage"></div>
+      <div>
+        <div class="lb" id="g-lb"></div>
+        <div class="feed" id="g-feed"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div id="h-end" hidden class="endwrap">
+    <h1 id="e-title" style="font-size:40px"></h1>
+    <div id="e-summary" class="big"></div>
+    <div class="podium" id="e-podium"></div>
+    <table class="res" id="e-table"></table>
+    <div class="btnrow"><button id="e-again" style="font-size:22px;padding:14px 32px">🔁 다른 게임 고르기</button></div>
+  </div>
+
+  <div id="h-msg" class="err" style="text-align:center"></div>
+</div>
+<script src="/host.js"></script>
+</body>
+</html>

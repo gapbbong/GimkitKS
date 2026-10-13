@@ -1,0 +1,17 @@
+{
+  "name": "gimkit",
+  "version": "1.0.0",
+  "description": "교실용 퀴즈 게임 플랫폼: 6가지 게임, 최대 40명 동시 접속",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "ws": "^8.22.0"
+  }
+}
